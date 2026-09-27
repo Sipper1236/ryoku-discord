@@ -7,19 +7,20 @@ Based on [niqqudim/ryoku-discord](https://github.com/niqqudim/ryoku-discord), th
 
 Install `Ryoku.theme.css` in Vencord’s Themes folder and enable it in Settings → Vencord → Themes. Disable other full themes, including `midnight-ryoku.theme.css`, to avoid competing layout rules.
 
-The user options at the top of the theme include:
+Open **Super+W → Settings → Ryoku Palette Bridge → App integrations → Vesktop** to control palette following. **SET UP** enables wallpaper colors; **REMOVE** (then **CONFIRM REMOVE**) turns palette following off and returns to the original red/gold palette. Ryoku remains enabled in Vesktop.
+
+Keep Vencord QuickCSS enabled. [Ryoku Palette Bridge](https://github.com/Sipper1236/ryoku-palette-bridge) writes the palette and its enabled signal into QuickCSS, so wallpaper changes apply while Discord remains open. This requires the bridge integration version that emits `--ryo-bridge-enabled` and preserves an enabled Ryoku theme.
+
+The default follows that menu. Advanced users can override the option at the top of the theme:
 
 ```css
 :root {
-    --ryo-palette-mode: 0; /* 0: original red/gold, 1: live bridge palette */
+    --ryo-palette-mode: var(--ryo-bridge-enabled, 0); /* follow the menu */
+    /* Use 0 to always keep red/gold, or 1 to always consume available palette colors. */
 }
 ```
 
-To follow [Ryoku Palette Bridge](https://github.com/Sipper1236/ryoku-palette-bridge), set the option to `1` and keep Vencord QuickCSS enabled. The bridge’s generated `:root` colors in `settings/quickCss.css` update the theme while Discord remains open. Keep your mode choice in the theme file: the bridge regenerates QuickCSS on palette changes.
-
-Live mode renders each decorative illustration in one palette tone (multicolor plates become monochrome) and colors the UI. Presence indicators use the bridge’s dedicated online, do-not-disturb, idle, and streaming colors. Missing bridge colors fall back to the original palette. Mode `0` keeps the original palette even when bridge QuickCSS is present. The installed theme remains a single CSS file.
-
-The bridge installer currently enables Midnight automatically. If you run that installer again, disable Midnight in Vencord’s Themes page so Ryoku remains the active layout.
+Live mode renders each decorative illustration in one palette tone (multicolor plates become monochrome). Presence indicators use the bridge’s dedicated status colors. Missing bridge colors fall back to the original palette. The installed theme remains a single CSS file.
 
 ## Rendering
 

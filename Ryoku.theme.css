@@ -20,9 +20,10 @@
    ============================================================ */
 
 :root {
-    /* Color source: 0 = original Ryoku red/gold; 1 = live Palette Bridge.
+    /* Follow Super+W → Ryoku Palette Bridge → Vesktop by default.
+       Advanced override: 0 = original red/gold; 1 = live bridge palette.
        Missing bridge colors fall back to the original palette. */
-    --ryo-palette-mode: 0;
+    --ryo-palette-mode: var(--ryo-bridge-enabled, 0);
 }
 
 body {
