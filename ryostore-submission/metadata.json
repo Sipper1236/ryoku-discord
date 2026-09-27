@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Ryoku Discord theme with live ryoku-palette-bridge colors and rendering improvements.",
   "category": "vesktop-themes",
-  "license": "unknown",
+  "license": "GPL-3.0",
+  "licenseUrl": "https://opensource.org/licenses/GPL-3.0",
   "upstream": "https://github.com/niqqudim/ryoku-discord"
 }

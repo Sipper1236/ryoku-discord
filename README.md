@@ -3,6 +3,10 @@ Ryoku Discord theme for Vesktop/Vencord with optional live Ryoku Palette Bridge 
 
 Based on [niqqudim/ryoku-discord](https://github.com/niqqudim/ryoku-discord), the original Ryoku theme by Ron. Original theme design and artwork credit belongs to the upstream project. This fork adds palette integration, animation changes, and compatibility documentation.
 
+## License
+
+This project is licensed under the [GPL-3.0](https://opensource.org/licenses/GPL-3.0) license, compatible with the Ryoku ecosystem. The original upstream theme by Ron is used with attribution.
+
 ## Palette modes
 
 Install `Ryoku.theme.css` in Vencord’s Themes folder and enable it in Settings → Vencord → Themes. Disable other full themes, including `midnight-ryoku.theme.css`, to avoid competing layout rules.
