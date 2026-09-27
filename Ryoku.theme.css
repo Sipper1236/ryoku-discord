@@ -5,7 +5,8 @@
  * @description Ryoku, Paper and ink.
  * @website https://ryoku.dev
  * @invite Sf7sGwy4kG
- * @source https://github.com/niqqudim/ryoku-discord
+ * @source https://github.com/Sipper1236/ryoku-discord
+ * Original theme: https://github.com/niqqudim/ryoku-discord
  * @authorId 681210857337913387
  */
 
@@ -17,6 +18,12 @@
    RYOKU — user options
    Edit this block everything else reads these variables.
    ============================================================ */
+
+:root {
+    /* Color source: 0 = original Ryoku red/gold; 1 = live Palette Bridge.
+       Missing bridge colors fall back to the original palette. */
+    --ryo-palette-mode: 0;
+}
 
 body {
     /* fonts */
@@ -166,30 +173,99 @@ body {
 }
 
 /* --- 01-tokens.css --- */
-/* palette. matugen can rewrite the hex values later
-   --ryo-brand and --ryo-gold stay put */
+/* Resolve bridge inputs on :root, before the body exports theme aliases.
+   Keeping inputs here avoids cycles with body --bg-*, --text-* and --accent-*. */
 
 :root {
     container-name: root;
 
-    --ryo-paper: var(--bg-4, #0a0a0a);
+    /* An absent bridge accent leaves this invalid, preserving original SVGs. */
+    --ryo-bridge-art: var(--accent-2);
+
+    --ryo-paper: color-mix(in srgb, #0a0a0a, var(--bg-4, #0a0a0a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-paper-lift: color-mix(in srgb, #111111, var(--bg-3, #111111) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-paper-raised: color-mix(in srgb, #161616, color-mix(in srgb, var(--bg-3, #161616) 70%, var(--bg-2, #161616)) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-paper-high: color-mix(in srgb, #1c1c1c, var(--bg-2, #1c1c1c) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-paper-highest: color-mix(in srgb, #242424, var(--bg-1, #242424) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-ink: color-mix(in srgb, #cdc4ba, var(--text-1, #cdc4ba) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-ink-dim: color-mix(in srgb, #b0a9a0, var(--text-3, #b0a9a0) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-ink-muted: color-mix(in srgb, #958f87, var(--text-5, #958f87) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-ink-on-bone: color-mix(in srgb, #0a0a0a, var(--text-0, #0a0a0a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-sun: color-mix(in srgb, #e2342a, var(--accent-2, #e2342a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-gold: color-mix(in srgb, #d9a441, var(--accent-1, #d9a441) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-accent-hover: color-mix(in srgb, #f04a40, var(--accent-4, #f04a40) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-accent-active: color-mix(in srgb, #c42d25, var(--accent-5, #c42d25) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-online: color-mix(in srgb, #8fbf7a, var(--online-indicator, #8fbf7a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-dnd: color-mix(in srgb, #e2342a, var(--dnd-indicator, #e2342a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-idle: color-mix(in srgb, #d9a441, var(--idle-indicator, #d9a441) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --ryo-streaming: color-mix(in srgb, #a87bb8, var(--streaming-indicator, #a87bb8) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
     --ryo-paper-lowest: color-mix(in srgb, var(--ryo-paper) 70%, #000);
-    --ryo-paper-lift: var(--bg-3, #111111);
-    --ryo-paper-raised: color-mix(in srgb, var(--bg-3, #161616) 70%, var(--bg-2, #161616));
-    --ryo-paper-high: var(--bg-2, #1c1c1c);
-    --ryo-paper-highest: var(--bg-1, #242424);
+    --ryo-ink-faint: color-mix(in srgb, var(--ryo-ink-muted) 78%, #000);
+    --ryo-bone: var(--ryo-ink);
+    --ryo-brand: var(--ryo-sun);
 
-    --ryo-ink: var(--text-1, #cdc4ba);
-    --ryo-ink-dim: var(--text-3, #b0a9a0);
-    --ryo-ink-muted: var(--text-5, #958f87);
-    --ryo-ink-faint: color-mix(in srgb, var(--ryo-ink-muted) 78%, #000000);
+    /* Invalid captures deliberately select the exact original shade when absent. */
+    --ryo-live-red-1: color-mix(in srgb, var(--dnd-indicator) 80%, white);
+    --ryo-live-red-2: var(--dnd-indicator);
+    --ryo-live-red-3: color-mix(in srgb, var(--dnd-indicator) 80%, black);
+    --ryo-live-red-4: color-mix(in srgb, var(--dnd-indicator) 60%, black);
+    --ryo-live-red-5: color-mix(in srgb, var(--dnd-indicator) 40%, black);
+    --ryo-live-green-1: color-mix(in srgb, var(--online-indicator) 80%, white);
+    --ryo-live-green-2: var(--online-indicator);
+    --ryo-live-green-3: color-mix(in srgb, var(--online-indicator) 80%, black);
+    --ryo-live-green-4: color-mix(in srgb, var(--online-indicator) 60%, black);
+    --ryo-live-green-5: color-mix(in srgb, var(--online-indicator) 40%, black);
+    --ryo-live-yellow-1: color-mix(in srgb, var(--idle-indicator) 80%, white);
+    --ryo-live-yellow-2: var(--idle-indicator);
+    --ryo-live-yellow-3: color-mix(in srgb, var(--idle-indicator) 80%, black);
+    --ryo-live-yellow-4: color-mix(in srgb, var(--idle-indicator) 60%, black);
+    --ryo-live-yellow-5: color-mix(in srgb, var(--idle-indicator) 40%, black);
+    --ryo-live-purple-1: color-mix(in srgb, var(--streaming-indicator) 80%, white);
+    --ryo-live-purple-2: var(--streaming-indicator);
+    --ryo-live-purple-3: color-mix(in srgb, var(--streaming-indicator) 80%, black);
+    --ryo-live-purple-4: color-mix(in srgb, var(--streaming-indicator) 60%, black);
+    --ryo-live-purple-5: color-mix(in srgb, var(--streaming-indicator) 40%, black);
+    --ryo-live-blue-1: color-mix(in srgb, var(--accent-2) 80%, white);
+    --ryo-live-blue-2: var(--accent-2);
+    --ryo-live-blue-3: color-mix(in srgb, var(--accent-2) 80%, black);
+    --ryo-live-blue-4: color-mix(in srgb, var(--accent-2) 60%, black);
+    --ryo-live-blue-5: color-mix(in srgb, var(--accent-2) 40%, black);
+    --ryo-live-primary-100: color-mix(in srgb, var(--text-1) 100%, var(--bg-4));
+    --ryo-live-primary-130: color-mix(in srgb, var(--text-1) 95%, var(--bg-4));
+    --ryo-live-primary-160: color-mix(in srgb, var(--text-1) 90%, var(--bg-4));
+    --ryo-live-primary-200: color-mix(in srgb, var(--text-1) 83%, var(--bg-4));
+    --ryo-live-primary-230: color-mix(in srgb, var(--text-1) 78%, var(--bg-4));
+    --ryo-live-primary-260: color-mix(in srgb, var(--text-1) 73%, var(--bg-4));
+    --ryo-live-primary-300: color-mix(in srgb, var(--text-1) 67%, var(--bg-4));
+    --ryo-live-primary-330: color-mix(in srgb, var(--text-1) 62%, var(--bg-4));
+    --ryo-live-primary-360: color-mix(in srgb, var(--text-1) 57%, var(--bg-4));
+    --ryo-live-primary-400: color-mix(in srgb, var(--text-1) 50%, var(--bg-4));
+    --ryo-live-primary-430: color-mix(in srgb, var(--text-1) 45%, var(--bg-4));
+    --ryo-live-primary-460: color-mix(in srgb, var(--text-1) 40%, var(--bg-4));
+    --ryo-live-primary-500: color-mix(in srgb, var(--text-1) 33%, var(--bg-4));
+    --ryo-live-primary-530: color-mix(in srgb, var(--text-1) 28%, var(--bg-4));
+    --ryo-live-primary-560: color-mix(in srgb, var(--text-1) 23%, var(--bg-4));
+    --ryo-live-primary-600: color-mix(in srgb, var(--text-1) 17%, var(--bg-4));
+    --ryo-live-primary-630: color-mix(in srgb, var(--text-1) 12%, var(--bg-4));
+    --ryo-live-primary-660: color-mix(in srgb, var(--text-1) 7%, var(--bg-4));
+    --ryo-live-primary-700: color-mix(in srgb, var(--text-1) 0%, var(--bg-4));
+    --ryo-live-primary-730: color-mix(in srgb, var(--text-1) 0%, var(--bg-4));
+    --ryo-live-primary-760: color-mix(in srgb, var(--text-1) 0%, var(--bg-4));
+    --ryo-live-primary-800: color-mix(in srgb, var(--text-1) 0%, var(--bg-4));
+    --ryo-live-primary-900: color-mix(in srgb, var(--text-1) 0%, var(--bg-4));
 
-    --ryo-bone: var(--text-1, #cdc4ba);
-    --ryo-ink-on-bone: var(--text-0, #0a0a0a);
+    --ryo-live-background-base-highest: color-mix(in srgb, var(--bg-1) 95%, var(--text-1));
+    --ryo-live-background-surface-highest: color-mix(in srgb, var(--bg-1) 95%, var(--text-1));
+    --ryo-live-text-positive: var(--online-indicator);
+    --ryo-live-brand-560: var(--accent-5);
+    --ryo-live-brand-600: color-mix(in srgb, var(--accent-2) 62%, black);
+    --ryo-live-button-filled-brand-background-hover: var(--accent-4);
+    --ryo-live-button-filled-brand-background-active: var(--accent-5);
+    --ryo-live-button-filled-brand-text: var(--text-0);
+    --ryo-live-green-360: var(--online-indicator);
+    --ryo-live-status-positive: color-mix(in srgb, var(--online-indicator) 80%, black);
 
-    --ryo-sun: var(--accent-2, #e2342a);
-    --ryo-brand: #e2342a;
-    --ryo-gold: #d9a441;
+    --ryo-on-accent: color-mix(in srgb, #fff8f4, var(--text-0, #fff8f4) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
 
     --ryo-line: color-mix(in srgb, var(--ryo-ink) 26%, transparent);
     --ryo-line-soft: color-mix(in srgb, var(--ryo-ink) 13%, transparent);
@@ -273,42 +349,42 @@ body {
     --accent-1: var(--ryo-gold);
     --accent-2: var(--ryo-sun);
     --accent-3: var(--ryo-sun);
-    --accent-4: #f04a40;
-    --accent-5: #c42d25;
+    --accent-4: var(--ryo-accent-hover);
+    --accent-5: var(--ryo-accent-active);
     --accent-new: var(--ryo-sun);
     --border-light: var(--ryo-line-soft);
     --border: var(--ryo-line);
     --border-hover: var(--ryo-line-strong);
     --button-border: var(--ryo-line);
-    --red-1: #f06a62;
-    --red-2: var(--ryo-sun);
-    --red-3: #c42d25;
-    --red-4: #8c211b;
-    --red-5: #6a1914;
-    --green-1: #a8d090;
-    --green-2: #8fbf7a;
-    --green-3: #6ea35c;
-    --green-4: #4e7d42;
-    --green-5: #3a5c32;
-    --blue-1: var(--ryo-gold);
-    --blue-2: var(--ryo-sun);
-    --blue-3: var(--ryo-sun);
-    --blue-4: #c42d25;
-    --blue-5: #8c211b;
-    --yellow-1: #e8c56a;
-    --yellow-2: var(--ryo-gold);
-    --yellow-3: #b88830;
-    --yellow-4: #8f6a24;
-    --yellow-5: #6a4e1a;
-    --purple-1: #c9a0d4;
-    --purple-2: #a87bb8;
-    --purple-3: #875a96;
-    --purple-4: #664074;
-    --purple-5: #4a2e54;
-    --online: var(--green-2);
-    --dnd: var(--red-2);
-    --idle: var(--yellow-2);
-    --streaming: var(--purple-2);
+    --red-1: color-mix(in srgb, #f06a62, var(--ryo-live-red-1, #f06a62) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --red-2: color-mix(in srgb, var(--ryo-sun), var(--ryo-live-red-2, var(--ryo-sun)) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --red-3: color-mix(in srgb, #c42d25, var(--ryo-live-red-3, #c42d25) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --red-4: color-mix(in srgb, #8c211b, var(--ryo-live-red-4, #8c211b) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --red-5: color-mix(in srgb, #6a1914, var(--ryo-live-red-5, #6a1914) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --green-1: color-mix(in srgb, #a8d090, var(--ryo-live-green-1, #a8d090) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --green-2: color-mix(in srgb, #8fbf7a, var(--ryo-live-green-2, #8fbf7a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --green-3: color-mix(in srgb, #6ea35c, var(--ryo-live-green-3, #6ea35c) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --green-4: color-mix(in srgb, #4e7d42, var(--ryo-live-green-4, #4e7d42) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --green-5: color-mix(in srgb, #3a5c32, var(--ryo-live-green-5, #3a5c32) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --blue-1: color-mix(in srgb, var(--ryo-gold), var(--ryo-live-blue-1, var(--ryo-gold)) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --blue-2: color-mix(in srgb, var(--ryo-sun), var(--ryo-live-blue-2, var(--ryo-sun)) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --blue-3: color-mix(in srgb, var(--ryo-sun), var(--ryo-live-blue-3, var(--ryo-sun)) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --blue-4: color-mix(in srgb, #c42d25, var(--ryo-live-blue-4, #c42d25) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --blue-5: color-mix(in srgb, #8c211b, var(--ryo-live-blue-5, #8c211b) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --yellow-1: color-mix(in srgb, #e8c56a, var(--ryo-live-yellow-1, #e8c56a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --yellow-2: color-mix(in srgb, var(--ryo-gold), var(--ryo-live-yellow-2, var(--ryo-gold)) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --yellow-3: color-mix(in srgb, #b88830, var(--ryo-live-yellow-3, #b88830) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --yellow-4: color-mix(in srgb, #8f6a24, var(--ryo-live-yellow-4, #8f6a24) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --yellow-5: color-mix(in srgb, #6a4e1a, var(--ryo-live-yellow-5, #6a4e1a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --purple-1: color-mix(in srgb, #c9a0d4, var(--ryo-live-purple-1, #c9a0d4) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --purple-2: color-mix(in srgb, #a87bb8, var(--ryo-live-purple-2, #a87bb8) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --purple-3: color-mix(in srgb, #875a96, var(--ryo-live-purple-3, #875a96) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --purple-4: color-mix(in srgb, #664074, var(--ryo-live-purple-4, #664074) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --purple-5: color-mix(in srgb, #4a2e54, var(--ryo-live-purple-5, #4a2e54) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --online: var(--ryo-online);
+    --dnd: var(--ryo-dnd);
+    --idle: var(--ryo-idle);
+    --streaming: var(--ryo-streaming);
     --offline: var(--text-4);
 
     --font-primary: var(--ryo-font-ui);
@@ -351,10 +427,10 @@ body.theme-dark {
     --background-base: var(--ryo-paper-raised);
     --background-base-high: var(--ryo-paper-high);
     --background-base-higher: var(--ryo-paper-highest);
-    --background-base-highest: #2a2a2a;
+    --background-base-highest: color-mix(in srgb, #2a2a2a, var(--ryo-live-background-base-highest, #2a2a2a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
     --background-surface-high: var(--ryo-paper-high);
     --background-surface-higher: var(--ryo-paper-highest);
-    --background-surface-highest: #2a2a2a;
+    --background-surface-highest: color-mix(in srgb, #2a2a2a, var(--ryo-live-background-surface-highest, #2a2a2a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
 
     --bg-base-primary: var(--ryo-paper);
     --bg-base-secondary: var(--ryo-paper-lift);
@@ -394,9 +470,9 @@ body.theme-dark {
     --text-strong: var(--ryo-ink);
     --text-link: var(--ryo-gold);
     --text-link-low-saturation: var(--ryo-gold);
-    --text-positive: #8fbf7a;
-    --text-warning: var(--ryo-gold);
-    --text-danger: var(--ryo-sun);
+    --text-positive: color-mix(in srgb, #8fbf7a, var(--ryo-live-text-positive, #8fbf7a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --text-warning: var(--ryo-idle);
+    --text-danger: var(--ryo-dnd);
     --text-brand: var(--ryo-sun);
     --text-default: var(--ryo-ink);
     --text-primary: var(--ryo-ink);
@@ -413,55 +489,55 @@ body.theme-dark {
     --interactive-active: var(--ryo-ink);
     --interactive-muted: var(--ryo-ink-faint);
 
-    --primary-100: #e8e0d6;
-    --primary-130: #cdc4ba;
-    --primary-160: #c4bbb1;
-    --primary-200: #b0a9a0;
-    --primary-230: #a49d94;
-    --primary-260: #958f87;
-    --primary-300: #8a847c;
-    --primary-330: #7a756e;
-    --primary-360: #6c675f;
-    --primary-400: #5c5852;
-    --primary-430: #4d4944;
-    --primary-460: #3f3c38;
-    --primary-500: #32302c;
-    --primary-530: #2a2825;
-    --primary-560: #242424;
-    --primary-600: #1c1c1c;
-    --primary-630: #161616;
-    --primary-660: #111111;
-    --primary-700: #0a0a0a;
-    --primary-730: #080808;
-    --primary-760: #050505;
-    --primary-800: #030303;
-    --primary-900: #000000;
+    --primary-100: color-mix(in srgb, #e8e0d6, var(--ryo-live-primary-100, #e8e0d6) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-130: color-mix(in srgb, #cdc4ba, var(--ryo-live-primary-130, #cdc4ba) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-160: color-mix(in srgb, #c4bbb1, var(--ryo-live-primary-160, #c4bbb1) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-200: color-mix(in srgb, #b0a9a0, var(--ryo-live-primary-200, #b0a9a0) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-230: color-mix(in srgb, #a49d94, var(--ryo-live-primary-230, #a49d94) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-260: color-mix(in srgb, #958f87, var(--ryo-live-primary-260, #958f87) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-300: color-mix(in srgb, #8a847c, var(--ryo-live-primary-300, #8a847c) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-330: color-mix(in srgb, #7a756e, var(--ryo-live-primary-330, #7a756e) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-360: color-mix(in srgb, #6c675f, var(--ryo-live-primary-360, #6c675f) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-400: color-mix(in srgb, #5c5852, var(--ryo-live-primary-400, #5c5852) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-430: color-mix(in srgb, #4d4944, var(--ryo-live-primary-430, #4d4944) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-460: color-mix(in srgb, #3f3c38, var(--ryo-live-primary-460, #3f3c38) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-500: color-mix(in srgb, #32302c, var(--ryo-live-primary-500, #32302c) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-530: color-mix(in srgb, #2a2825, var(--ryo-live-primary-530, #2a2825) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-560: color-mix(in srgb, #242424, var(--ryo-live-primary-560, #242424) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-600: color-mix(in srgb, #1c1c1c, var(--ryo-live-primary-600, #1c1c1c) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-630: color-mix(in srgb, #161616, var(--ryo-live-primary-630, #161616) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-660: color-mix(in srgb, #111111, var(--ryo-live-primary-660, #111111) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-700: color-mix(in srgb, #0a0a0a, var(--ryo-live-primary-700, #0a0a0a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-730: color-mix(in srgb, #080808, var(--ryo-live-primary-730, #080808) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-760: color-mix(in srgb, #050505, var(--ryo-live-primary-760, #050505) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-800: color-mix(in srgb, #030303, var(--ryo-live-primary-800, #030303) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --primary-900: color-mix(in srgb, #000000, var(--ryo-live-primary-900, #000000) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
 
     --brand-experiment: var(--ryo-sun);
     --brand-500: var(--ryo-sun);
-    --brand-560: #c42d25;
-    --brand-600: #8c211b;
+    --brand-560: color-mix(in srgb, #c42d25, var(--ryo-live-brand-560, #c42d25) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --brand-600: color-mix(in srgb, #8c211b, var(--ryo-live-brand-600, #8c211b) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
     --control-brand-foreground: var(--ryo-sun);
     --control-brand-foreground-new: var(--ryo-sun);
     --button-filled-brand-background: var(--ryo-sun);
-    --button-filled-brand-background-hover: #f04a40;
-    --button-filled-brand-background-active: #c42d25;
-    --button-filled-brand-text: #fff8f4;
+    --button-filled-brand-background-hover: color-mix(in srgb, #f04a40, var(--ryo-live-button-filled-brand-background-hover, #f04a40) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --button-filled-brand-background-active: color-mix(in srgb, #c42d25, var(--ryo-live-button-filled-brand-background-active, #c42d25) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --button-filled-brand-text: color-mix(in srgb, #fff8f4, var(--ryo-live-button-filled-brand-text, #fff8f4) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
     --focus-primary: var(--ryo-sun);
     --mention-foreground: var(--ryo-sun);
     --mention-background: var(--ryo-sun-16);
 
-    --green-360: #8fbf7a;
-    --red-400: var(--ryo-sun);
-    --red-500: var(--ryo-sun);
-    --yellow-300: var(--ryo-gold);
-    --status-danger: var(--ryo-sun);
-    --status-warning: var(--ryo-gold);
-    --status-positive: #6ea35c;
-    --text-feedback-critical: var(--ryo-sun);
-    --icon-feedback-critical: var(--ryo-sun);
-    --info-danger-foreground: var(--ryo-sun);
-    --info-danger-background: var(--ryo-sun-10);
+    --green-360: color-mix(in srgb, #8fbf7a, var(--ryo-live-green-360, #8fbf7a) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --red-400: var(--ryo-dnd);
+    --red-500: var(--ryo-dnd);
+    --yellow-300: var(--ryo-idle);
+    --status-danger: var(--ryo-dnd);
+    --status-warning: var(--ryo-idle);
+    --status-positive: color-mix(in srgb, #6ea35c, var(--ryo-live-status-positive, #6ea35c) calc(clamp(0, var(--ryo-palette-mode), 1) * 100%));
+    --text-feedback-critical: var(--ryo-dnd);
+    --icon-feedback-critical: var(--ryo-dnd);
+    --info-danger-foreground: var(--ryo-dnd);
+    --info-danger-background: color-mix(in srgb, var(--ryo-dnd) 10%, transparent);
 
     --border-subtle: var(--ryo-line);
     --border-strong: var(--ryo-line-strong);
@@ -1789,7 +1865,6 @@ nav[class*="guilds__"]::before {
     [class*="containerDefault"] [class*="link"] {
         position: relative;
         transition: margin-left var(--list-item-transition);
-        will-change: margin-left;
     }
 
     .wrapper__2ea32:hover .link__2ea32,
@@ -1849,14 +1924,14 @@ nav[class*="guilds__"]::before {
         width: 8px;
         height: 8px;
         margin-left: -4px;
-        transition: margin-left var(--list-item-transition);
-        will-change: margin-left;
+        translate: 0;
+        transition: translate var(--list-item-transition);
     }
 
     .wrapper__2ea32:hover .unread__2ea32,
     [class*="wrapper_"]:hover [class*="unread_"],
     [class*="containerDefault"]:hover [class*="unread_"] {
-        margin-left: 4px;
+        translate: 8px;
     }
 
     [class*="lookFilled"],
@@ -1893,12 +1968,13 @@ nav[class*="guilds__"]::before {
 
     li[id^="chat-messages-"]:has([class*="sending"]),
     li[id^="chat-messages-"]:has([class*="isSending"]) {
-        animation: msg-pop-in var(--msg-pop-duration) cubic-bezier(0.2, 0.75, 0.2, 1) both;
+        /* Release the animation's transform/filter after it finishes. */
+        animation: msg-pop-in var(--msg-pop-duration) cubic-bezier(0.2, 0.75, 0.2, 1) backwards;
     }
 
     [class*="messagesWrapper"] {
         transform-origin: left center;
-        animation: msg-pop-in var(--chat-fade-duration) cubic-bezier(0.2, 0.75, 0.2, 1) both;
+        animation: msg-pop-in var(--chat-fade-duration) cubic-bezier(0.2, 0.75, 0.2, 1) backwards;
     }
 
     [class*="messagesWrapper"] ol[data-list-id="chat-messages"] {
@@ -1943,6 +2019,8 @@ nav[class*="guilds__"]::before {
     .side_aa8da2 .item_aa8da2,
     [class*="privateChannels"] [class*="channel_"],
     [class*="side"] [class*="item"],
+    [class*="sidebarRegion"] [class*="item"],
+    [class*="containerDefault"] [class*="link"],
     [class*="unread_"] {
         transition: none !important;
         margin-left: 0 !important;
@@ -1956,6 +2034,8 @@ nav[class*="guilds__"]::before {
         opacity: 1 !important;
     }
 
+    [class*="tutorialContainer"] [class*="childWrapper"]::before,
+    a[href="/channels/@me"] [class*="childWrapper"]::before,
     [data-list-item-id="guildsnav___home"] [class*="childWrapper"]::before,
     [data-list-item-id="guildsnav___home"] > div::before {
         animation: none !important;
@@ -2347,7 +2427,8 @@ div[class*="readyInner"]::before,
     width: var(--ryoku-size) !important;
     height: var(--ryoku-size) !important;
     margin: 0 auto !important;
-    background: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%0A%3Cdefs%3E%3Cmask%20id%3D%22paint%22%3E%3Crect%20width%3D%22320%22%20height%3D%22320%22%20fill%3D%22%23000%22%2F%3E%3Cellipse%20cx%3D%22130.8%22%20cy%3D%22143.4%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.048%3B0.181%3B0.94%3B1%22%20values%3D%220%3B0%3B27.0%3B27.0%3B27.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.048%3B0.181%3B0.94%3B1%22%20values%3D%220%3B0%3B37.0%3B37.0%3B37.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22226.5%22%20cy%3D%22145.2%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.119%3B0.253%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.119%3B0.253%3B0.94%3B1%22%20values%3D%220%3B0%3B24.0%3B24.0%3B24.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22172.0%22%20cy%3D%22222.8%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.173%3B0.306%3B0.94%3B1%22%20values%3D%220%3B0%3B56.0%3B56.0%3B56.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.173%3B0.306%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22103.1%22%20cy%3D%22216.9%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.244%3B0.378%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.244%3B0.378%3B0.94%3B1%22%20values%3D%220%3B0%3B24.0%3B24.0%3B24.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22100.6%22%20cy%3D%2294.8%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.340%3B0.473%3B0.94%3B1%22%20values%3D%220%3B0%3B51.0%3B51.0%3B51.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.340%3B0.473%3B0.94%3B1%22%20values%3D%220%3B0%3B23.0%3B23.0%3B23.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22164.9%22%20cy%3D%22113.8%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.411%3B0.544%3B0.94%3B1%22%20values%3D%220%3B0%3B34.0%3B34.0%3B34.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.411%3B0.544%3B0.94%3B1%22%20values%3D%220%3B0%3B29.0%3B29.0%3B29.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22138.2%22%20cy%3D%22197.2%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.494%3B0.628%3B0.94%3B1%22%20values%3D%220%3B0%3B41.0%3B41.0%3B41.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.494%3B0.628%3B0.94%3B1%22%20values%3D%220%3B0%3B24.0%3B24.0%3B24.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22219.4%22%20cy%3D%22100.0%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.578%3B0.711%3B0.94%3B1%22%20values%3D%220%3B0%3B46.0%3B46.0%3B46.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.578%3B0.711%3B0.94%3B1%22%20values%3D%220%3B0%3B32.0%3B32.0%3B32.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22219.1%22%20cy%3D%22187.4%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.619%3B0.753%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.619%3B0.753%3B0.94%3B1%22%20values%3D%220%3B0%3B36.0%3B36.0%3B36.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22148.3%22%20cy%3D%2265.2%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.691%3B0.824%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.691%3B0.824%3B0.94%3B1%22%20values%3D%220%3B0%3B24.0%3B24.0%3B24.0%22%2F%3E%3C%2Fellipse%3E%3C%2Fmask%3E%3C%2Fdefs%3E%0A%3Ctext%20x%3D%22160%22%20y%3D%22214%22%20text-anchor%3D%22middle%22%20font-family%3D%22Noto%20Serif%20CJK%20JP%2C%20Shippori%20Mincho%2C%20serif%22%20font-size%3D%22188%22%20font-weight%3D%22700%22%20fill%3D%22%23cdc4ba%22%20opacity%3D%22.14%22%3E%E5%8A%9B%3C%2Ftext%3E%0A%3Cg%20mask%3D%22url%28%23paint%29%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22214%22%20text-anchor%3D%22middle%22%20font-family%3D%22Noto%20Serif%20CJK%20JP%2C%20Shippori%20Mincho%2C%20serif%22%20font-size%3D%22188%22%20font-weight%3D%22700%22%20fill%3D%22%23cdc4ba%22%3E%E5%8A%9B%3C%2Ftext%3E%3C%2Fg%3E%0A%3Cg%20transform%3D%22translate%2887.7%20138.8%29%20rotate%286.1%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.000%3B0.067%3B0.167%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2286.6%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.000%3B0.023%3B0.067%3B0.167%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28251.4%20121.5%29%20rotate%28149.3%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.083%3B0.133%3B0.233%3B1%22%20values%3D%22170%200%3B170%200%3B0%200%3B0%200%3B170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2256.6%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.083%3B0.101%3B0.133%3B0.233%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28209.5%20240.9%29%20rotate%28-128.7%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.125%3B0.192%3B0.292%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-3.0%22%20width%3D%2259.1%22%20height%3D%226%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.125%3B0.148%3B0.192%3B0.292%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28126.5%20232.9%29%20rotate%28-145.6%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.208%3B0.258%3B0.358%3B1%22%20values%3D%22170%200%3B170%200%3B0%200%3B0%200%3B170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2256.7%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.208%3B0.226%3B0.258%3B0.358%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%2889.5%2072.9%29%20rotate%2863.1%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.292%3B0.358%3B0.458%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2249.0%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.292%3B0.315%3B0.358%3B0.458%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28196.0%2079.1%29%20rotate%28155.4%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.375%3B0.425%3B0.525%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2254.8%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.375%3B0.393%3B0.425%3B0.525%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28139.4%20223.7%29%20rotate%28-109.7%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.458%3B0.508%3B0.608%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2251.0%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.458%3B0.476%3B0.508%3B0.608%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28240.3%2077.2%29%20rotate%28132.6%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.542%3B0.592%3B0.692%3B1%22%20values%3D%22170%200%3B170%200%3B0%200%3B0%200%3B170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2261.8%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.542%3B0.559%3B0.592%3B0.692%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28244.6%20202.2%29%20rotate%28-150.0%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.583%3B0.633%3B0.733%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2259.0%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.583%3B0.601%3B0.633%3B0.733%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28123.4%2048.3%29%20rotate%2834.2%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.667%3B0.700%3B0.800%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2260.3%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.667%3B0.678%3B0.700%3B0.800%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%0A%3C%2Fsvg%3E") center / contain no-repeat !important;
+    --ryo-loading-art: url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20320%20320%22%3E%0A%3Cdefs%3E%3Cmask%20id%3D%22paint%22%3E%3Crect%20width%3D%22320%22%20height%3D%22320%22%20fill%3D%22%23000%22%2F%3E%3Cellipse%20cx%3D%22130.8%22%20cy%3D%22143.4%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.048%3B0.181%3B0.94%3B1%22%20values%3D%220%3B0%3B27.0%3B27.0%3B27.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.048%3B0.181%3B0.94%3B1%22%20values%3D%220%3B0%3B37.0%3B37.0%3B37.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22226.5%22%20cy%3D%22145.2%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.119%3B0.253%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.119%3B0.253%3B0.94%3B1%22%20values%3D%220%3B0%3B24.0%3B24.0%3B24.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22172.0%22%20cy%3D%22222.8%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.173%3B0.306%3B0.94%3B1%22%20values%3D%220%3B0%3B56.0%3B56.0%3B56.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.173%3B0.306%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22103.1%22%20cy%3D%22216.9%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.244%3B0.378%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.244%3B0.378%3B0.94%3B1%22%20values%3D%220%3B0%3B24.0%3B24.0%3B24.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22100.6%22%20cy%3D%2294.8%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.340%3B0.473%3B0.94%3B1%22%20values%3D%220%3B0%3B51.0%3B51.0%3B51.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.340%3B0.473%3B0.94%3B1%22%20values%3D%220%3B0%3B23.0%3B23.0%3B23.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22164.9%22%20cy%3D%22113.8%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.411%3B0.544%3B0.94%3B1%22%20values%3D%220%3B0%3B34.0%3B34.0%3B34.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.411%3B0.544%3B0.94%3B1%22%20values%3D%220%3B0%3B29.0%3B29.0%3B29.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22138.2%22%20cy%3D%22197.2%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.494%3B0.628%3B0.94%3B1%22%20values%3D%220%3B0%3B41.0%3B41.0%3B41.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.494%3B0.628%3B0.94%3B1%22%20values%3D%220%3B0%3B24.0%3B24.0%3B24.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22219.4%22%20cy%3D%22100.0%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.578%3B0.711%3B0.94%3B1%22%20values%3D%220%3B0%3B46.0%3B46.0%3B46.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.578%3B0.711%3B0.94%3B1%22%20values%3D%220%3B0%3B32.0%3B32.0%3B32.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22219.1%22%20cy%3D%22187.4%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.619%3B0.753%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.619%3B0.753%3B0.94%3B1%22%20values%3D%220%3B0%3B36.0%3B36.0%3B36.0%22%2F%3E%3C%2Fellipse%3E%3Cellipse%20cx%3D%22148.3%22%20cy%3D%2265.2%22%20rx%3D%220%22%20ry%3D%220%22%20fill%3D%22%23fff%22%3E%0A%3Canimate%20attributeName%3D%22rx%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.691%3B0.824%3B0.94%3B1%22%20values%3D%220%3B0%3B28.0%3B28.0%3B28.0%22%2F%3E%0A%3Canimate%20attributeName%3D%22ry%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.691%3B0.824%3B0.94%3B1%22%20values%3D%220%3B0%3B24.0%3B24.0%3B24.0%22%2F%3E%3C%2Fellipse%3E%3C%2Fmask%3E%3C%2Fdefs%3E%0A%3Ctext%20x%3D%22160%22%20y%3D%22214%22%20text-anchor%3D%22middle%22%20font-family%3D%22Noto%20Serif%20CJK%20JP%2C%20Shippori%20Mincho%2C%20serif%22%20font-size%3D%22188%22%20font-weight%3D%22700%22%20fill%3D%22%23cdc4ba%22%20opacity%3D%22.14%22%3E%E5%8A%9B%3C%2Ftext%3E%0A%3Cg%20mask%3D%22url%28%23paint%29%22%3E%3Ctext%20x%3D%22160%22%20y%3D%22214%22%20text-anchor%3D%22middle%22%20font-family%3D%22Noto%20Serif%20CJK%20JP%2C%20Shippori%20Mincho%2C%20serif%22%20font-size%3D%22188%22%20font-weight%3D%22700%22%20fill%3D%22%23cdc4ba%22%3E%E5%8A%9B%3C%2Ftext%3E%3C%2Fg%3E%0A%3Cg%20transform%3D%22translate%2887.7%20138.8%29%20rotate%286.1%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.000%3B0.067%3B0.167%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2286.6%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.000%3B0.023%3B0.067%3B0.167%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28251.4%20121.5%29%20rotate%28149.3%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.083%3B0.133%3B0.233%3B1%22%20values%3D%22170%200%3B170%200%3B0%200%3B0%200%3B170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2256.6%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.083%3B0.101%3B0.133%3B0.233%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28209.5%20240.9%29%20rotate%28-128.7%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.125%3B0.192%3B0.292%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-3.0%22%20width%3D%2259.1%22%20height%3D%226%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.125%3B0.148%3B0.192%3B0.292%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28126.5%20232.9%29%20rotate%28-145.6%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.208%3B0.258%3B0.358%3B1%22%20values%3D%22170%200%3B170%200%3B0%200%3B0%200%3B170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2256.7%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.208%3B0.226%3B0.258%3B0.358%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%2889.5%2072.9%29%20rotate%2863.1%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.292%3B0.358%3B0.458%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2249.0%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.292%3B0.315%3B0.358%3B0.458%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28196.0%2079.1%29%20rotate%28155.4%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.375%3B0.425%3B0.525%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2254.8%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.375%3B0.393%3B0.425%3B0.525%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28139.4%20223.7%29%20rotate%28-109.7%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.458%3B0.508%3B0.608%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2251.0%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.458%3B0.476%3B0.508%3B0.608%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28240.3%2077.2%29%20rotate%28132.6%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.542%3B0.592%3B0.692%3B1%22%20values%3D%22170%200%3B170%200%3B0%200%3B0%200%3B170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2261.8%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.542%3B0.559%3B0.592%3B0.692%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28244.6%20202.2%29%20rotate%28-150.0%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.583%3B0.633%3B0.733%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2259.0%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.583%3B0.601%3B0.633%3B0.733%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%3Cg%20transform%3D%22translate%28123.4%2048.3%29%20rotate%2834.2%29%22%3E%0A%3Cg%3E%0A%3CanimateTransform%20attributeName%3D%22transform%22%20type%3D%22translate%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.667%3B0.700%3B0.800%3B1%22%20values%3D%22-170%200%3B-170%200%3B0%200%3B0%200%3B-170%200%22%2F%3E%0A%3Crect%20x%3D%220%22%20y%3D%22-2.5%22%20width%3D%2260.3%22%20height%3D%225%22%20fill%3D%22%23d9a441%22%20opacity%3D%220%22%3E%0A%3Canimate%20attributeName%3D%22opacity%22%20dur%3D%221.2s%22%20repeatCount%3D%22indefinite%22%20keyTimes%3D%220%3B0.667%3B0.678%3B0.700%3B0.800%3B1%22%20values%3D%220%3B0%3B1%3B1%3B0%3B0%22%2F%3E%0A%3C%2Frect%3E%3C%2Fg%3E%3C%2Fg%3E%0A%3C%2Fsvg%3E");
+    background: var(--ryo-loading-art) center / contain no-repeat !important;
 }
 
 /* --- 08-chrome.css --- */
@@ -2370,7 +2451,7 @@ div[class*="readyInner"]::before,
 
 [class*="lookFilled"][class*="colorBrand"] {
     background-color: var(--ryo-sun) !important;
-    color: #fff8f4 !important;
+    color: var(--ryo-on-accent) !important;
     border-radius: var(--ryo-radius) !important;
 }
 
@@ -2389,7 +2470,7 @@ div[class*="readyInner"]::before,
 
 [class*="numberBadge"] {
     background-color: var(--ryo-brand) !important;
-    color: #fff8f4 !important;
+    color: var(--ryo-on-accent) !important;
     border-radius: 3px !important;
 }
 
@@ -2907,7 +2988,7 @@ div[class*="readyInner"]::before,
 #add_friend-tab [class*="lookFilled"][class*="colorBrand"],
 #add_friend-tab [class*="button"][class*="colorBrand"] {
     background-color: var(--ryo-sun) !important;
-    color: #fff8f4 !important;
+    color: var(--ryo-on-accent) !important;
     border-color: var(--ryo-sun) !important;
 }
 
@@ -2921,7 +3002,7 @@ div[class*="readyInner"]::before,
 [class*="addFriend"][class*="selected"],
 [class*="addFriend"][aria-selected="true"] {
     background-color: var(--ryo-sun) !important;
-    color: #fff8f4 !important;
+    color: var(--ryo-on-accent) !important;
 }
 
 [class*="addFriend"] span {
@@ -2946,7 +3027,7 @@ div[class*="readyInner"]::before,
 
 [class*="switchIndicator"] [class*="thumb"] rect,
 [data-mana-component="switch"] svg rect {
-    fill: #fff8f4 !important;
+    fill: var(--ryo-on-accent) !important;
 }
 
 /* settings content buttons */
@@ -2954,7 +3035,7 @@ div[class*="readyInner"]::before,
 [class*="contentColumn"] [data-mana-component="button"][class*="primary"],
 [class*="contentBody"] [data-mana-component="button"][class*="primary"] {
     background-color: var(--ryo-sun) !important;
-    color: #fff8f4 !important;
+    color: var(--ryo-on-accent) !important;
     border-color: var(--ryo-sun) !important;
 }
 
@@ -2964,7 +3045,7 @@ div[class*="readyInner"]::before,
 [class*="contentColumn"] [data-mana-component="button"][class*="critical"],
 [class*="contentColumn"] [class*="lookFilled"][class*="colorRed"] {
     background-color: var(--ryo-sun) !important;
-    color: #fff8f4 !important;
+    color: var(--ryo-on-accent) !important;
     border-color: var(--ryo-sun) !important;
 }
 
@@ -3013,7 +3094,7 @@ div[class*="readyInner"]::before,
 [class*="messageRequest"] [data-mana-component="button"][class*="primary"],
 [class*="actionButtons"] [data-mana-component="button"][class*="primary"] {
     background-color: var(--ryo-sun) !important;
-    color: #fff8f4 !important;
+    color: var(--ryo-on-accent) !important;
     border-color: var(--ryo-sun) !important;
 }
 
@@ -3207,3 +3288,97 @@ aside[class*="membersWrap"]::after,
     background-size: contain !important;
 }
 
+/* Live artwork uses each SVG's alpha as a mask. CSS colors update immediately
+   with QuickCSS, without duplicating SVG paths or fetching additional assets.
+   Original mode retains the original multicolor artwork. */
+@container root style(--ryo-palette-mode: 1) and style(--ryo-bridge-art) {
+    .guilds__5e434::before,
+    nav[class*="guilds__"]::before {
+        background-image: none !important;
+        background-color: var(--ryo-ink) !important;
+        mask: var(--ryo-guild-mark-image) center bottom / contain no-repeat !important;
+        filter: blur(var(--ryo-guild-mark-blur)) !important;
+    }
+
+    [class*="contentBody"]:has([data-settings-category-key])::before,
+    [class*="contentBody"]:has([data-panel-bottom])::before {
+        background-image: none !important;
+        background-color: var(--ryo-ink) !important;
+        mask: var(--ryo-hands-image) center center / contain no-repeat !important;
+        filter: blur(var(--ryo-hands-blur)) !important;
+    }
+
+    #add_friend-tab::after {
+        background-image: none !important;
+        background-color: var(--ryo-gold) !important;
+        mask: var(--ryo-friends-plate) center / contain no-repeat !important;
+    }
+
+    [class*="sidebarList"] nav::before {
+        background-image: none !important;
+        background-color: var(--ryo-sun) !important;
+        mask: var(--ryo-flower-image) right bottom / contain no-repeat !important;
+    }
+
+    [class*="emptyStateContainer"] [class*="image"] {
+        background-image: none !important;
+        background-color: var(--ryo-ink) !important;
+        mask: var(--ryo-quiet-plate) center / contain no-repeat !important;
+    }
+
+    [class*="wrapper__33d12"]:has([class*="image__33d12"]):not([class*="emptyStateContainer"]) [class*="image"] {
+        background-image: none !important;
+        background-color: var(--ryo-ink) !important;
+        mask: var(--ryo-quiet-plate) center / contain no-repeat !important;
+    }
+
+    .inventoryWrapper__1feb0:has(.productsEmpty__70c55)::after,
+    [class*="inventoryWrapper"]:has([class*="productsEmpty"])::after {
+        background-image: none !important;
+        background-color: var(--ryo-ink) !important;
+        mask: var(--ryo-skyline-image) center bottom / contain no-repeat !important;
+        filter: blur(var(--ryo-skyline-blur)) !important;
+    }
+
+    .img__8b924,
+    [class*="productsEmpty"] img[alt="No results found"],
+    [class*="productsEmpty"] [class*="img"] {
+        background-image: none !important;
+        background-color: var(--ryo-sun) !important;
+        mask: var(--ryo-moth-image) center center / contain no-repeat !important;
+    }
+
+    .emptyResultsWrap_a98f3b [class*="noResultsImage"],
+    [class*="emptyResultsWrap"] [class*="noResultsImage"] {
+        background-image: none !important;
+        background-color: var(--ryo-sun) !important;
+        mask: var(--ryo-moth-image) center center / contain no-repeat !important;
+    }
+
+    .nowPlayingColumn__133bf::before,
+    [class*="nowPlayingColumn"]::before {
+        background-image: none !important;
+        background-color: var(--ryo-gold) !important;
+        mask: var(--ryo-baseball-image) center bottom / contain no-repeat !important;
+        filter: blur(var(--ryo-baseball-blur)) !important;
+    }
+
+    [class*="emptyCard"]::after {
+        background-image: none !important;
+        background-color: var(--ryo-ink) !important;
+        mask: var(--ryo-quiet-plate) center / contain no-repeat !important;
+    }
+
+    [class*="members_"][class*="scrollerBase"]::after {
+        background-image: none !important;
+        background-color: var(--ryo-ink) !important;
+        mask: var(--ryo-colophon) center / contain no-repeat !important;
+    }
+
+    div[class*="container"][class*="fixClipping"] > [class*="content"]::before,
+    div[class*="readyInner"]::before,
+    [class*="splash"] [class*="content"]::before {
+        background: var(--ryo-gold) !important;
+        mask: var(--ryo-loading-art) center / contain no-repeat !important;
+    }
+}
