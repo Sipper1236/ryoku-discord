@@ -1,0 +1,8 @@
+{
+  "name": "Ryoku Discord",
+  "version": "1.0.0",
+  "description": "Ryoku Discord theme with live ryoku-palette-bridge colors and rendering improvements.",
+  "category": "vesktop-themes",
+  "license": "unknown",
+  "upstream": "https://github.com/niqqudim/ryoku-discord"
+}
