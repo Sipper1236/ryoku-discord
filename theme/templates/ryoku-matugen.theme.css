@@ -351,3 +351,36 @@ body {
         translate: 10px 0;
     }
 }
+
+/* Fork list entrances: one fade per surface, with no inherited animation gate. */
+.peopleColumn__133bf,
+.container_f391e3,
+#requests-tab,
+#spam-tab,
+.peopleColumn__133bf [class*="sectionTitle_"],
+.peopleColumn__133bf [class*="peopleListItem_"],
+.container_f391e3 .sectionTitle_f391e3,
+.container_f391e3 .messageRequestItem_abb9ad {
+    animation: none;
+}
+@container body style(--animations: on) and style(--friends-animation: on) {
+    .peopleColumn__133bf {
+        animation: ryo-fade 300ms ease-out backwards;
+    }
+}
+@container body style(--animations: on) and style(--requests-animation: on) {
+    #requests-tab,
+    #spam-tab {
+        animation: ryo-fade 300ms ease-out backwards;
+    }
+}
+.productCardContainer_fcbddd {
+    animation-fill-mode: backwards;
+}
+@media (prefers-reduced-motion: reduce) {
+    .peopleColumn__133bf,
+    #requests-tab,
+    #spam-tab {
+        animation: none !important;
+    }
+}

@@ -64,3 +64,26 @@ This should reduce hover-triggered layout work and unnecessary layer promotion.
 The change has not yet been benchmarked against the merged upstream v3 theme;
 the 2026-10-17 figures above describe the older theme and should not be treated
 as measurements of this update.
+
+## List entrance cleanup — 2026-10-25
+
+Friends and message requests now fade once per list surface instead of using an
+animated inherited custom property to start staggered animations on every row.
+This removes the row-count-dependent entrance animations and the inherited gate
+mechanism. The visual change is a short whole-list fade instead of staggered rows.
+Both the global animation switch and the individual feature switches apply;
+reduced motion disables these fades. Matching overrides ship in all seven
+installable variants because they import the upstream hosted base.
+
+Timed shop-card entrances use backwards fill so their translate and scale
+values are released when the entrance ends. Scroll-driven shop reveals retain
+their fill behavior. These changes have no measured live Discord speedup yet.
+
+Chromium headless fixture checks used 60 friends and 60 request rows against
+upstream `8637576`, the modified build, and each installable variant's overrides.
+Upstream assigned entrance animations to all 120 rows; the updated styles
+assigned none to rows and one fade to each of the two list surfaces. Individual
+feature switches and the global switch suppressed both fades. A reduced-motion
+run also suppressed them. Finishing the timed shop entrance restored `translate`
+and `scale` to `none`, versus upstream's retained `0px` and `1` values. These
+checks establish CSS behavior in a fixture, not live Discord rendering speed.
