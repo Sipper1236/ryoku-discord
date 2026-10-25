@@ -316,9 +316,13 @@ body {
     --app-icon-image: var(--ryo-avatar); /* replaces the blurple app icon */
 }
 
-/* Keep list hover motion out of layout and avoid promoting every scroller. */
+/* Keep list hover motion out of layout and avoid blanket scroll hints. */
 [class*='scroll'] {
     will-change: auto;
+}
+/* Keep the scroll preparation hint on dynamic chat history only. */
+.scroller__36d07 {
+    will-change: scroll-position;
 }
 
 @container body style(--animations: on) {

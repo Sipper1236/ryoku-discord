@@ -56,11 +56,11 @@ hover movement with `margin-left`, which changes layout during each transition.
 The build now uses the independent `translate` property for those movements,
 and no longer sets permanent `will-change: margin-left` hints. The broad
 `[class*='scroll'] { will-change: scroll-position }` rule was also removed to
-avoid pre-promoting every element whose class name contains “scroll”. Each
+avoid applying the hint to every element whose class name contains “scroll”. Each
 installable theme variant includes matching post-import overrides, so these
 changes apply even while its base stylesheet is loaded from the upstream host.
 
-This should reduce hover-triggered layout work and unnecessary layer promotion.
+This should reduce hover-triggered layout work and unnecessary scroll preparation hints.
 The change has not yet been benchmarked against the merged upstream v3 theme;
 the 2026-10-17 figures above describe the older theme and should not be treated
 as measurements of this update.
@@ -87,3 +87,59 @@ feature switches and the global switch suppressed both fades. A reduced-motion
 run also suppressed them. Finishing the timed shop entrance restored `translate`
 and `scale` to `none`, versus upstream's retained `0px` and `1` values. These
 checks establish CSS behavior in a fixture, not live Discord rendering speed.
+
+## Live Store release checks — 2026-10-25
+
+Tested the bundled `dist/Ryoku Optimized.theme.css` in Vesktop 1.6.7
+(Electron 43.2.0 / Chromium 150) using an isolated copy of the local profile.
+The comparison used upstream `8637576` with the same plugins and QuickCSS,
+two accessible text channels, and eight switches per version in four batches
+(upstream / optimized / optimized / upstream). Both channels and fonts were
+warmed under each theme before measurements. Each measured navigation had to
+change the route and render message rows belonging to the target channel.
+Ready time ends after those rows and two animation frames; settled time also
+waits for the message-list entrance animation and another 100ms. Timings include
+Discord application work and browser automation overhead.
+
+| Median per channel switch | Upstream | Optimized |
+| --- | ---: | ---: |
+| Ready time | 1,062.7 ms | 1,061.8 ms |
+| Settled time | 1,197.0 ms | 1,203.8 ms |
+| Renderer task duration | 1,095.0 ms | 1,092.2 ms |
+| Style calculation duration | 475.6 ms | 417.3 ms |
+| Layout duration | 53.8 ms | 47.8 ms |
+
+The samples show less style-calculation work (about 12%), with no meaningful
+end-to-end channel-switch speedup. Results are specific to this profile and
+workload, and are not presented as FPS measurements.
+
+Testing found that removing the scroll preparation hint everywhere made channel
+switching slower. A fixed-theme probe reproduced that difference when toggling
+the hint, so `.scroller__36d07` (chat history) now retains
+`will-change: scroll-position`. Other scrollers keep the blanket hint disabled.
+The final comparison above includes that correction.
+
+With the optimized theme held fixed, four more channel switches produced no
+changes to Vencord's theme stylesheet, no observed stock-theme samples, and no
+horizontal page overflow. The flashes seen while comparing versions occurred
+when the benchmark deliberately replaced the enabled theme file. The default
+palette was also checked with QuickCSS disabled. The public preview is captured
+from running Vesktop with account names, messages, and avatars replaced by
+example data.
+
+`tools/benchmark-channel-switching.cjs` reproduces the navigation workload via
+Playwright and a local DevTools port. Use an isolated test profile with both
+`Ryoku Upstream Control.theme.css` and `Ryoku Optimized.theme.css` installed.
+Build the control with `tools/build-store-theme.py --upstream-ref 8637576
+--output /path/to/Ryoku\ Upstream\ Control.theme.css`. The benchmark takes two
+text-channel paths as arguments, records numeric results without message text,
+and restores the prior theme and route on completion. Set `PLAYWRIGHT_MODULE`
+if Playwright is installed outside this repository, and `RYOKU_CDP_URL` if the
+DevTools port is not 9224. Raw account-specific profiles and screenshots stay
+outside the repository.
+
+The Ryostore package was also installed and removed through the actual Store
+client with isolated XDG config/data/state/cache directories. Its installed CSS
+matched the tested distribution byte for byte. The Store package uses the flat
+filename `Ryoku-Optimized.theme.css`, since the client rejects spaces in installed
+theme filenames; the display name is still “Ryoku Optimized”.

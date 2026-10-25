@@ -11,11 +11,15 @@ ink and paper
 
 ### any client that supports theme files (vencord / vesktop...)
 
-1. download [`theme/ryoku.theme.css`](theme/ryoku.theme.css)
+1. download [`dist/Ryoku Optimized.theme.css`](dist/Ryoku%20Optimized.theme.css)
 2. put it in the themes folder and enable it
 3. if you want you can also easily customize the theme by opening the file and modifying the variables 
 
-the theme file only has the settings needed, the rest is imported
+The optimized distribution bundles this fork's layout CSS, settings, and most
+artwork in one file. Google Fonts, the Context Icons stylesheet, and a few
+upstream icon resources are still fetched remotely. The settings wrappers in
+`theme/` are also available; they import the upstream hosted base and include
+the fork's performance overrides.
 
 ## Sipper1236 fork
 
@@ -25,9 +29,13 @@ at [`fork/Ryoku-bridge-performance.theme.css`](fork/Ryoku-bridge-performance.the
 It is a standalone legacy variant; the current upstream theme and assets live in
 `theme/`, `build/`, and `assets/`.
 
-The current upstream stylesheet is the one linked in the install steps above.
+The current optimized v3 stylesheet is linked in the install steps above.
 The legacy fork stylesheet still follows the Ryoku Palette Bridge setting from
 Super+W → Settings → Ryoku Palette Bridge → App integrations → Vesktop.
+
+Build the Store distribution with `python3 tools/build-store-theme.py`.
+Live Vesktop comparisons, including channel switching and their limitations,
+are documented in [PERFORMANCE.md](PERFORMANCE.md).
 
 
 ## credits

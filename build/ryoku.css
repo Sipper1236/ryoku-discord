@@ -605,6 +605,10 @@ body {
     --font-code: var(--code-font), 'gg mono', 'Source Code Pro', Consolas, Monaco, monospace;
 }
 
+/* Keep the scroll preparation hint on dynamic chat history only. */
+.scroller__36d07 {
+    will-change: scroll-position;
+}
 .burstGlow__23977 {
     display: none;
 }
