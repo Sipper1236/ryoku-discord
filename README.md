@@ -1,41 +1,36 @@
-# ryoku-discord
-Ryoku Discord theme for Vesktop/Vencord with optional live Ryoku Palette Bridge colors and rendering improvements.
+# Ryoku discord theme
+ink and paper
 
-Based on [niqqudim/ryoku-discord](https://github.com/niqqudim/ryoku-discord), the original Ryoku theme by Ron. Original theme design and artwork credit belongs to the upstream project. This fork adds palette integration, animation changes, and compatibility documentation.
+![Chatl](https://i.postimg.cc/BQGHYJvW/image.png)
 
-## License
+![Settings](https://i.postimg.cc/ZnPG8Jf4/image.png)
 
-This project is licensed under the [GPL-3.0](https://opensource.org/licenses/GPL-3.0) license, compatible with the Ryoku ecosystem. The original upstream theme by Ron is used with attribution.
+![Friends](https://i.postimg.cc/nrmKszcN/image.png)
 
-## Palette modes
+## install
 
-Install `Ryoku.theme.css` in Vencord’s Themes folder and enable it in Settings → Vencord → Themes. Disable other full themes, including `midnight-ryoku.theme.css`, to avoid competing layout rules.
+### any client that supports theme files (vencord / vesktop...)
 
-Open **Super+W → Settings → Ryoku Palette Bridge → App integrations → Vesktop** to control palette following. **SET UP** enables wallpaper colors; **REMOVE** (then **CONFIRM REMOVE**) turns palette following off and returns to the original red/gold palette. Ryoku remains enabled in Vesktop.
+1. download [`theme/ryoku.theme.css`](theme/ryoku.theme.css)
+2. put it in the themes folder and enable it
+3. if you want you can also easily customize the theme by opening the file and modifying the variables 
 
-Keep Vencord QuickCSS enabled. [Ryoku Palette Bridge](https://github.com/Sipper1236/ryoku-palette-bridge) writes the palette and its enabled signal into QuickCSS, so wallpaper changes apply while Discord remains open. This requires the bridge integration version that emits `--ryo-bridge-enabled` and preserves an enabled Ryoku theme.
+the theme file only has the settings needed, the rest is imported
 
-The default follows that menu. Advanced users can override the option at the top of the theme:
+## Sipper1236 fork
 
-```css
-:root {
-    --ryo-palette-mode: var(--ryo-bridge-enabled, 0); /* follow the menu */
-    /* Use 0 to always keep red/gold, or 1 to always consume available palette colors. */
-}
-```
+This fork follows the upstream project and also keeps its earlier palette-bridge
+and rendering work. The stylesheet from that earlier fork version is preserved
+at [`fork/Ryoku-bridge-performance.theme.css`](fork/Ryoku-bridge-performance.theme.css).
+It is a standalone legacy variant; the current upstream theme and assets live in
+`theme/`, `build/`, and `assets/`.
 
-Live mode renders each decorative illustration in one palette tone (multicolor plates become monochrome). Presence indicators use the bridge’s dedicated status colors. Missing bridge colors fall back to the original palette. The installed theme remains a single CSS file.
+The current upstream stylesheet is the one linked in the install steps above.
+The legacy fork stylesheet still follows the Ryoku Palette Bridge setting from
+Super+W → Settings → Ryoku Palette Bridge → App integrations → Vesktop.
 
-## Rendering
 
-Unread indicators animate with a translation; completed message animations release their transform/filter effects. Reduced-motion settings suppress the supported theme animations. Permanent row `will-change` hints are removed. These changes remove unnecessary rendering work. A [live Vesktop check](PERFORMANCE.md) found stutters with and without the theme; it did not establish a measurable speedup.
+## credits
 
-## Original theme screenshots
-
-These screenshots come from the upstream project and show its original appearance.
-
-![Chatl](https://i.postimg.cc/4y8wMMHN/image.png)
-
-![Settings](https://i.postimg.cc/C1T2HWkW/image.png)
-
-![Friends](https://i.postimg.cc/VzFN5zmt/image.png)
+- [system24](https://github.com/refact0r/system24) and [midnight](https://github.com/refact0r/midnight-discord) by refact0r a lot of the code is based on these themes 
+- death's-head moth: [Image by pikisuperstar on Magnific](https://www.magnific.com/free-vector/hand-drawn-death-moth-drawing-illustration_49611618.htm#fromView=search&page=1&position=17&uuid=f43cb916-dd55-40b9-b672-1d1ce8c4de50&track=ais_hybrid&query=Free+svg+moth)
