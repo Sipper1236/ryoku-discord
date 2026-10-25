@@ -286,3 +286,51 @@ body {
     --panel-label-letter-spacing: 1.4px;
     --panel-label-font: 'SpaceMono Nerd Font', 'Space Mono', 'JetBrains Mono', ui-monospace, monospace;
 }
+
+/* Keep list hover motion out of layout and avoid promoting every scroller. */
+[class*='scroll'] {
+    will-change: auto;
+}
+
+@container body style(--animations: on) {
+    .wrapper__2ea32 .link__2ea32,
+    .container__91a9d,
+    .channel__972a0 {
+        transition: translate var(--list-item-transition);
+        will-change: auto;
+    }
+    .wrapper__2ea32:hover .link__2ea32 {
+        margin-left: 0;
+        translate: 10px 0;
+    }
+    .container__91a9d:hover,
+    .channel__972a0:hover {
+        margin-left: 0;
+        translate: 18px 0;
+    }
+    .unread__2ea32 {
+        transition: translate var(--list-item-transition);
+        will-change: auto;
+    }
+    .wrapper__2ea32:hover .unread__2ea32 {
+        margin-left: -4px;
+        translate: 8px 0;
+    }
+    .typeThread__2ea32 .unread__2ea32 {
+        margin-left: -8px;
+    }
+    .wrapper__2ea32.typeThread__2ea32:hover .unread__2ea32 {
+        margin-left: -8px;
+        translate: 8px 0;
+    }
+}
+
+@container body style(--animations: on) and style(--hover-slide: on) {
+    .side_aa8da2:not(.tabs__70e05) .item_aa8da2 {
+        transition: translate var(--list-item-transition);
+    }
+    .side_aa8da2:not(.tabs__70e05) .item_aa8da2:hover {
+        margin-left: 0;
+        translate: 10px 0;
+    }
+}

@@ -48,3 +48,19 @@ Removed `li[id^="chat-messages-"]:has(...)` queries and sending blur filter.
 | Style recalculations | 45 | 21–22 | **~52% fewer recalculations** |
 | Style recalculation time | 35.8–37.3 ms | 16.5–16.9 ms | **~54% faster style calculation** |
 | Total renderer task duration | 95.6–102.8 ms | 50.6–55.2 ms | **~47% faster task duration** |
+
+## Layout animation cleanup — 2026-10-25
+
+The upstream v3 stylesheet still animated channel, member, DM, and settings-list
+hover movement with `margin-left`, which changes layout during each transition.
+The build now uses the independent `translate` property for those movements,
+and no longer sets permanent `will-change: margin-left` hints. The broad
+`[class*='scroll'] { will-change: scroll-position }` rule was also removed to
+avoid pre-promoting every element whose class name contains “scroll”. Each
+installable theme variant includes matching post-import overrides, so these
+changes apply even while its base stylesheet is loaded from the upstream host.
+
+This should reduce hover-triggered layout work and unnecessary layer promotion.
+The change has not yet been benchmarked against the merged upstream v3 theme;
+the 2026-10-17 figures above describe the older theme and should not be treated
+as measurements of this update.
